@@ -1,0 +1,328 @@
+USER CREATION:
+--------------
+
+CREATE USER IF NOT EXISTS mithun@localhost IDENTIFIED BY 'password';
+
+OR 
+
+CREATE USER mithun@localhost IDENTIFIED BY 'password';
+
+OR
+
+CREATE USER mithun@% IDENTIFIED BY 'password';
+note: % means user can access from any host.
+
+SHOW USERS:
+----------
+
+SELECT USER FROM mysql.user;
+
+GRANTING PRIVELEGES TO USER:
+---------------------------
+ALL PRIVILEGES
+CREATE
+DROP
+SELECT
+UPDATE
+INSERT
+DELETE
+
+
+GRANT ALL PRIVILEGES ON *.* TO mithun@localhost;
+
+or 
+
+GRANT SELECT, UPDATE ON *.* TO mithun@localhost;
+
+
+FLUSHING PRIVELEGES:
+------------------
+
+FLUSH PRIVILEGES;
+
+SHOW GRANTS:
+------------
+
+SHOW GRANTS FOR mithun@localhost
+
+
+DELETING A USER:
+---------------
+
+DROP USER mithun@localhost;
+
+or 
+
+DROP USER mithun@localhost, mithun2@localhost, testingaccount;
+
+
+SHOW COLUMN NAMES OF USER TABLE:
+------------------------------
+
+SELECT user FROM mysql.user;
+DESC user;
+
+
+SHOW ALL USERS WITH SPECIFIED COLUMNS:
+-------------------------------------
+
+SELECT user, host, password_last_changed, max_connections FROM mysql.user;
+
+SHOW CURRENTLY LOGGED IN USERS:
+------------------------------
+
+SELECT user, host, db, command FROM information_schema.processlist;  
+
+
+CHANGE PASSWORD OF USER:
+-----------------------
+
+1. UPDATE METHOD: (mysql version < 5.7.6)
+----------------------------------------
+
+UPDATE user SET password=PASSWORD('updatedpassword') WHERE user='mithun' AND host='localhost';
+
+1.UPDATE METHOD (mysql version > 5.7.6)
+-----------------------------------------
+
+UPDATE user SET authentication_String=PASSWORD('updatedpassword') WHERE user='mithun' AND host='localhost';
+
+2. SET PASSWORD METHOD (mysql version < 5.7.6)
+----------------------------------------------
+
+SET PASSWORD FOR 'mithun'@'localhot'= PASSWORD('updatedpassword');
+
+2. SET PASSWORD METHOD (mysql version > 5.7.6)
+------------------------------------------------
+
+SET PASSWORD FOR 'mithun'@'localhost' = updatedpassword;
+
+3.ALTER USER STATEMENT:
+---------------------
+
+ALTER USER mithun@localhost IDENTIFIED BY 'updatedpassword';
+
+CREATE DATABASE:
+---------------
+
+CREATE DATABASE databasename;
+
+SHOW DATABASE:
+-------------
+
+SHOW DATABASES;
+
+USING DATABASE:
+----------------
+
+USE databasename;
+
+DROP DATABASE:
+--------------
+
+DROP DATABASE databasename;
+
+CREATE TABLE:
+------------
+
+USE databasename;
+
+CREATE TABLE tablename(
+ID INT(6) NOT NULL AUTO_INCREMENT,
+NAME VARCHAR(50) NOT NULL,
+EMAIL VARCHAR(128) NOT NULL,
+DESIGNATION VARCHAR(50) NOT NULL,
+DATE_JOINED TIMESTAMP,
+PRIMARY KEY(ID)
+);
+
+SHOW tables;
+
+VIEW COLUMN INFO OF A TABLE:
+--------------------------
+
+USE datbasename;
+
+show tables;
+
+DESCRIBE table_name;
+
+
+ALTERING TABLE AND COLUMNS:
+-------------------------
+
+A) ADDING A COLUMN NAME:
+------------------------
+
+ALTER TABLE tablename
+ADD COLUMN anothercolumnname;
+
+IF WE NEED TO SPECIFY AFTER A PARTICULAR COLUMN:
+
+ALTER TABLE tablename
+ADD COLUMN anothercolumnname
+AFTER particularcolumnname;
+
+B)ADDING MULTIPLE COLUMN NAMES:
+----------------------------------
+
+ALTER TABLE tablename
+ADD COLUMN thirdcolumnname INT NOT NULL,
+ADD COLUMN fourthcolumname VARCHAR(50) NOT NULL,
+AFTER secondcolumnname;
+
+
+C) MODIFYING COLUMN DEFINATION AND OTHER THINGS:
+--------------------------
+
+ALTER TABLE tablename
+MODIFY secondcolumnname VARCHAR(108) NOT NULL;
+
+D) DROPING A COLUMN:
+--------------------
+
+ALTER TABLE tablename
+DROP COLUMN fourthcolumnnanme;
+
+E) RENAMING A COLUMN NAME:
+------------------------
+
+ALTER TABLE tablename
+CHNAGE COLUMN oldcolumnname newcolumnanme
+VARCHAR(99) NOT NULL;
+
+F) RENAMING THE TABLE:
+----------------------
+
+ALTER TABLE tablename
+RENAME TO newtablename;
+
+G) REMOVE CONTENTS OF A TABLE WITHOUT EFFECTING TABLE STRUCTURE:
+---------------------------------------------------------
+
+TRUNCATE TABLE tablename;
+
+H) DROPPING A TABLE:
+--------------------
+
+DROP TABLE tablename;
+
+
+I) CREATING A VIEW:
+-------------------
+
+CREATE VIEW viewname AS 
+SELECT * FROM tablename WHERE columnname=value;
+
+J) UPDATING A VIEW:
+------------------
+
+ALTER VIEW viewname AS
+SELECT columnnameone, columnnametwo FROM tablename WHERE column-value;
+
+K)DROP VIEW:
+--------------
+
+DROP VIEW viewname;
+
+
+
+
+MYSQL QUERIES AND STATEMENTS:
+------------------------------
+
+INSERTING DATA: (Multiple Rows)
+--------------
+
+INSERT INTO tablename (columnanme1,columnnanme2,columnname3) VALUES ('mithun','Balakrishnan','pmithun@pm.me'), 
+('mithun2','Balakrishnan2','pmithun2@pm.me'), 
+('mithun3','Balakrishnan3','pmithun3@pm.me');
+
+
+UPDATING DATA: 
+---------------
+
+UPDATE tablename SET columnname='value' WHERE particluarcolumn=value;
+
+
+DELETING DATA:
+-------------
+
+DELETE FROM tablename WHERE columnname=value;
+
+
+SELECTING PARTICLUAR DATA FROM A TABLE:
+--------------------------------------
+
+SELECT columnname1,columnname2 FROM tablename WHERE columnname=value;
+
+
+SELECTING ALL VALUES OF A TABLE:
+---------------------------------
+
+SELECT * FROM tablename;
+
+or SELECT * FROM tablename WHERE columnname=value;
+
+
+
+
+
+MYSQL INDEXES:
+=============
+
+1. CREATING AN INDEX WHILE CREATING A TABLE:
+-----------------------------------------------------
+
+CREATE TABLE tablename (
+colname1 INT(6) NOT NULL PRIMARY KEY AUTO_MINCREMENT,
+colname2 VARCHAR(50) NOT NULL,
+colname3 varchar(50) NOT NULL,
+INDEX(colname2,colname3) 
+);
+
+2. CREATING AN INDEX IN SEPERATE STATEMENT:
+---------------------------------------------
+
+CREATE INDEX indexname ON tablename(colname1,colname2);
+
+
+3. SEE INDEXES OF A TABLE:
+--------------------------
+
+SHOW INDEXES FROM tablename;
+
+or
+
+SHOW KEYS FROM tablename;
+
+or 
+
+SHOW INDEXES FROM databasename.tablename;
+
+or 
+
+SHOW INDEXES FROM tablename IN databasename;
+
+
+
+4. DROPING AN INDEX FROM A TABLE:
+---------------------------------
+
+DROP INDEX indexname ON tablename;
+
+
+5. DROPPING A PRIMARY KEY INDEX FROM A TABLE:
+---------------------------------------------
+
+DROP INDEX PRIMARY ON tablename;
+
+6. CREATE INDEX WITH VISIBILITY AND COMMENT:
+------------------------------------------
+
+CREATE INDEX indexname ON tablename (columnname) INVISIBLE COMMENT 'some useful comment';
+
+7. SHOW INDEX WHICH ARE INVISIBLE:
+-----------------------------------
+
+SHOW INDEXES FROM tablename WHERE visible='No';
